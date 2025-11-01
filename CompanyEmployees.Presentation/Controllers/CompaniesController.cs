@@ -1,9 +1,11 @@
-﻿using CompanyEmployees.Presentation.ActionFilters;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
-using System.Threading.Tasks;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
@@ -69,5 +71,13 @@ public class CompaniesController : ControllerBase
     {
         await _service.CompanyService.UpdateCompanyAsync(id, company, trackChanges: true);
         return NoContent();
+    }
+
+    [HttpOptions]
+    public IActionResult GetCompaniesOptions()
+    {
+        Response.Headers.Append("Allow", "GET, OPTIONS, POST, PUT, DELETE");
+
+        return Ok();
     }
 }
