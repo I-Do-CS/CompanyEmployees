@@ -51,6 +51,7 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureVersioning();
+builder.Services.ConfigureRateLimitingOptions();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 
 var app = builder.Build();
@@ -64,6 +65,7 @@ if (app.Environment.IsProduction())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
+app.UseRateLimiter();
 app.UseCors("CorsPolicy");
 //app.UseResponseCaching();
 app.UseOutputCache();
