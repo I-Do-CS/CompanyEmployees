@@ -82,12 +82,21 @@ public static class ServiceExtensions
 
     public static void ConfigureVersioning(this IServiceCollection services)
     {
-        services.AddApiVersioning(opt =>
-        {
-            opt.ReportApiVersions = true;
-            opt.AssumeDefaultVersionWhenUnspecified = true;
-            opt.DefaultApiVersion = new ApiVersion(1, 0);
-            opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
-        }).AddMvc();
+        services
+            .AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            })
+            .AddMvc();
     }
+
+    public static void ConfigureOutputCaching(this IServiceCollection services) =>
+        services.AddOutputCache(opt =>
+        {
+            opt.AddBasePolicy(bp => bp.Expire(TimeSpan.FromSeconds(10)));
+            opt.AddPolicy("120SecondsDuration", p => p.Expire(TimeSpan.FromSeconds(120)));
+        });
 }
