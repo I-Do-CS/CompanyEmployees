@@ -35,7 +35,7 @@ builder
     .AddCustomCSVFormatter()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 builder.Services.AddCustomMediaTypes();
-builder.Services.AddAuthentication();
+//builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.ConfigureOutputCaching();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -52,6 +52,8 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureVersioning();
 builder.Services.ConfigureRateLimitingOptions();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 
 var app = builder.Build();
@@ -67,7 +69,6 @@ app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
 app.UseRateLimiter();
 app.UseCors("CorsPolicy");
-//app.UseResponseCaching();
 app.UseOutputCache();
 app.UseAuthentication();
 app.UseAuthorization();
