@@ -35,6 +35,7 @@ builder
     .AddCustomCSVFormatter()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 builder.Services.AddCustomMediaTypes();
+
 //builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.ConfigureOutputCaching();
@@ -53,6 +54,7 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureVersioning();
 builder.Services.ConfigureRateLimitingOptions();
 builder.Services.ConfigureIdentity();
+builder.Services.ConfigureSwagger();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 
@@ -60,6 +62,12 @@ var app = builder.Build();
 
 // Global Exception Handling
 app.UseExceptionHandler(options => { });
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 if (app.Environment.IsProduction())
     app.UseHsts();
